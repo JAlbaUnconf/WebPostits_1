@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -19,6 +20,8 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class Scraper implements ServletContextListener {
+
+    private static final Logger log = Logger.getLogger( Scraper.class.getName() );
 
     public static final String TOPIC_REPOSITORY = "topic_repository";
 
@@ -32,8 +35,15 @@ public class Scraper implements ServletContextListener {
         t = new Thread(() -> {
             try {
                 while (true) {
-                    scrapeQiqochat();
-                    System.out.println("Thread running every 10 seconds");
+
+                    long time = System.currentTimeMillis();
+                    try {
+                        log.info("start scraping...");
+                        scrapeQiqochat();
+                    } finally {
+                        time = System.currentTimeMillis() - time;
+                        log.info("scraped in " + time + "ms");
+                    }
                     Thread.sleep(10000);
                 }
             } catch (InterruptedException e) {
@@ -41,6 +51,7 @@ public class Scraper implements ServletContextListener {
             }
         });
         t.start();
+
     }
 
     private void scrapeQiqochat() {
@@ -48,7 +59,6 @@ public class Scraper implements ServletContextListener {
         topics.clear();
         Document doc = null;
         try {
-            System.out.println("start scraping...");
             //Qiqochat conversations page for pilot event
             doc = Jsoup.connect("https://qiqochat.com/c/pmtyyRCS/").get();
         } catch (IOException e) {
@@ -70,7 +80,7 @@ public class Scraper implements ServletContextListener {
             topicElements.put("author", authorName);
 
             topics.add(topicElements);
-            System.out.println(topics);
+            //log.info(topics);
         }
     }
 
