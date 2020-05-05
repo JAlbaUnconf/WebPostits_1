@@ -10,12 +10,14 @@ class Topic {
     private final String title;
     private String description;
     private final String author;
+    private final String authorImage;
 
-    public Topic(long id, String title, String description, String author) {
+    public Topic(long id, String title, String description, String author, String authorImage) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.author = author;
+        this.authorImage = authorImage;
     }
 
     public void updateFrom(Topic topic) {
@@ -26,8 +28,9 @@ class Topic {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("title", title);
-        result.put("text", description + " : " + id);
+        result.put("text", description);
         result.put("author", author);
+        result.put("authorImg", authorImage);
         return result;
     }
 

@@ -15,8 +15,8 @@ class Topics {
                         (long) t.get("id"),
                         (String) t.get("title"),
                         (String) t.get("text"),
-                        (String) t.get("author")
-                )));
+                        (String) t.get("author"),
+                        (String) t.get("authorImg"))));
     }
 
     public void addOrUpdate(Topic t) {
@@ -26,11 +26,6 @@ class Topics {
         } else {
             topics.add(t);
         }
-    }
-
-    public void fill(List<Map<String, Object>> topicsDto) {
-        topicsDto.clear();
-        topics.forEach(t -> topicsDto.add(t.asMap()));
     }
 
     public Collection<? extends Map<String, Object>> get() {

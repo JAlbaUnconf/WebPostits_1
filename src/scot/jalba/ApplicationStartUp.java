@@ -22,8 +22,11 @@ public class ApplicationStartUp implements ServletContextListener {
 
     private static final Logger log = Logger.getLogger(ApplicationStartUp.class.getName());
 
-    public static final String TOPIC_REPOSITORY = "topic_repository";
+    private static final String QIQOCHAT_URL = "https://jalba.qiqochat.com";
+
     public static final String QIQO_CHAT_PAGE = "https://qiqochat.com/c/pmtyyRCS/";
+
+    public static final String TOPIC_REPOSITORY = "topic_repository";
 
     private Thread t = null;
     private ServletContext context;
@@ -90,7 +93,12 @@ public class ApplicationStartUp implements ServletContextListener {
         Element authorImageUrl = topic.siblingElements().get(0).children().get(0);
         String authorName = authorImageUrl.attributes().get("alt");
 
-        return new Topic(topicCount, topicTitle.getWholeText(), desc, authorName);
+        String authorImg = authorImageUrl.attributes().get("src");
+        if (authorImg.startsWith("/")) {
+            authorImg = QIQOCHAT_URL + authorImg;
+        }
+
+        return new Topic(topicCount, topicTitle.getWholeText(), desc, authorName, authorImg);
     }
 
     @Override
