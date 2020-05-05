@@ -55,7 +55,7 @@
 </head>
 <body>
 <ul>
-    <c:forEach var="topic" items="<%=scot.jalba.PostitsServlet.getTopicData()%>">
+    <c:forEach var="topic" items="${topic_repository}">
         <li>
             <a href="#">
                 <c:forEach  var="topicElement" items="title,text,author">
