@@ -27,7 +27,7 @@ public class PostitsServlet extends javax.servlet.http.HttpServlet {
         refresh();
     }
 
-    private static synchronized void refresh() {
+    public static synchronized void refresh() {
         topics = new ArrayList<>();
         Document doc = null;
         try {
