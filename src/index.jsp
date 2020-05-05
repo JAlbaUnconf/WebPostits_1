@@ -14,12 +14,16 @@
             background:#666;
             color:#fff;
         }
-        h2,p{
-            font-size:100%;
-            font-weight:normal;
+        h2{
+            font-width: bold;
+            font-size: 120%;
         }
         ul,li{
             list-style:none;
+        }
+        p{
+            font-size:100%;
+            font-weight:normal;
         }
         ul{
             overflow:hidden;
@@ -38,17 +42,29 @@
             margin:1em;
             float:left;
         }
+        .author {
+            margin-top: 2em;
+            font-style: italic;
+        }
     </style>
-    <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content="30">
     <title>Marketplace</title>
 </head>
 <body>
 <ul>
-    <c:forEach  var="nam" items="<%=scot.jalba.PostitsServlet.getNames()%>">
+    <c:forEach var="topic" items="<%=scot.jalba.PostitsServlet.getTopicData()%>">
         <li>
             <a href="#">
-                <c:forEach  var="nal" items="${nam}">
-                    <p><c:out value="${nal}"/></p>
+                <c:forEach  var="topicElement" items="${topic}">
+                    <c:if test="${topicElement.key == 'title'}">
+                        <h2><c:out value="${topicElement.value}"/></h2>
+                    </c:if>
+                    <c:if test="${topicElement.key == 'text'}">
+                        <p>text: <c:out value="${topicElement.value}"/></p>
+                    </c:if>
+                    <c:if test="${topicElement.key == 'author'}">
+                        <p class="author"><c:out value="${topicElement.value}"/></p>
+                    </c:if>
                 </c:forEach>
             </a>
         </li>

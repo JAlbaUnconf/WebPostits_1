@@ -9,48 +9,57 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostitsServlet extends javax.servlet.http.HttpServlet {
 
-    public static synchronized List<List<String>> getNames() {
-        if (names.isEmpty()) {
-            refresh();
-        }
-        System.out.println(LocalTime.now() + " getNames() called");
-        return names;
-    }
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException { }
 
-    private static List<List<String>> names = new ArrayList<>();
+    private static List<Map<String,String>> topics = new ArrayList<>();
 
+    /**
+     * currently any GET request refreshes the servlet's data from the conversations page
+     */
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         refresh();
     }
 
     private static synchronized void refresh() {
-        names = new ArrayList<>();
+        topics = new ArrayList<>();
         Document doc = null;
         try {
+            //Qiqochat conversations page for pilot event
             doc = Jsoup.connect("https://qiqochat.com/c/pmtyyRCS/").get();
         } catch (IOException e) {
             e.printStackTrace();
         }
         Elements elementsByClass = doc.getElementsByClass("conversation-starter-label");
-        for (Element byClass : elementsByClass) {
-            List<String> conversationStarter = new ArrayList<>();
-            names.add(conversationStarter);
-            TextNode node = ((TextNode) byClass.childNodes().get(0));
-            conversationStarter.add(node.getWholeText());
-            Element img = byClass.siblingElements().get(0).children().get(0);
-            System.out.println(img.attributes().get("src"));
-            String alt = img.attributes().get("alt");
-            conversationStarter.add(alt);
-            System.out.println("refresh: name: " + alt);
-            Elements p = byClass.parent().getElementsByTag("p");
-            conversationStarter.add(((TextNode)p.get(0).childNodes().get(0)).getWholeText());
-            System.out.println("-------------");
+        for (Element topic : elementsByClass) {
+            Map<String,String> topicElements = new HashMap<>();
+
+            TextNode topicTitle = ((TextNode) topic.childNodes().get(0));
+            topicElements.put("title",topicTitle.getWholeText());
+
+            Elements topicText = topic.parent().getElementsByTag("p");
+            topicElements.put("text",((TextNode)topicText.get(0).childNodes().get(0)).getWholeText());
+
+            Element authorImageUrl = topic.siblingElements().get(0).children().get(0);
+            String authorName = authorImageUrl.attributes().get("alt");
+            topicElements.put("author",authorName);
+
+            topics.add(topicElements);
+            System.out.println("refreshing");
         }
+    }
+
+    public static synchronized List<Map<String,String>> getTopicData() {
+        if (topics.isEmpty()) {
+            refresh();
+        }
+        System.out.println(LocalTime.now() + " getNames() called");
+        return topics;
     }
 }
