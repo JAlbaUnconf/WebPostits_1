@@ -46,6 +46,9 @@
             margin-top: 2em;
             font-style: italic;
         }
+        .text {
+            margin-top: 1em;
+        }
     </style>
     <meta http-equiv="refresh" content="30">
     <title>Marketplace</title>
@@ -55,15 +58,15 @@
     <c:forEach var="topic" items="<%=scot.jalba.PostitsServlet.getTopicData()%>">
         <li>
             <a href="#">
-                <c:forEach  var="topicElement" items="${topic}">
-                    <c:if test="${topicElement.key == 'title'}">
-                        <h2><c:out value="${topicElement.value}"/></h2>
+                <c:forEach  var="topicElement" items="title,text,author">
+                    <c:if test="${topicElement == 'title'}">
+                        <h2><c:out value="${topic.get(topicElement)}"/></h2>
                     </c:if>
-                    <c:if test="${topicElement.key == 'text'}">
-                        <p>text: <c:out value="${topicElement.value}"/></p>
+                    <c:if test="${topicElement == 'text'}">
+                        <p class="text"><c:out value="${topic.get(topicElement)}"/></p>
                     </c:if>
-                    <c:if test="${topicElement.key == 'author'}">
-                        <p class="author"><c:out value="${topicElement.value}"/></p>
+                    <c:if test="${topicElement == 'author'}">
+                        <p class="author"><c:out value="${topic.get(topicElement)}"/></p>
                     </c:if>
                 </c:forEach>
             </a>

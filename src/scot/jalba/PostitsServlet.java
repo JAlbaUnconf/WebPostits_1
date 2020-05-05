@@ -18,7 +18,7 @@ public class PostitsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException { }
 
-    private static List<Map<String,String>> topics = new ArrayList<>();
+    private static List<Map<String,String>> topics;
 
     /**
      * currently any GET request refreshes the servlet's data from the conversations page
@@ -37,29 +37,25 @@ public class PostitsServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
         Elements elementsByClass = doc.getElementsByClass("conversation-starter-label");
+        int topicCount = 1;
         for (Element topic : elementsByClass) {
             Map<String,String> topicElements = new HashMap<>();
-
             TextNode topicTitle = ((TextNode) topic.childNodes().get(0));
-            topicElements.put("title",topicTitle.getWholeText());
-
+            topicElements.put("title",topicCount++ + " " + topicTitle.getWholeText());
             Elements topicText = topic.parent().getElementsByTag("p");
             topicElements.put("text",((TextNode)topicText.get(0).childNodes().get(0)).getWholeText());
-
             Element authorImageUrl = topic.siblingElements().get(0).children().get(0);
             String authorName = authorImageUrl.attributes().get("alt");
             topicElements.put("author",authorName);
-
             topics.add(topicElements);
-            System.out.println("refreshing");
+            System.out.println(topics);
         }
     }
 
     public static synchronized List<Map<String,String>> getTopicData() {
-        if (topics.isEmpty()) {
+        if (topics == null) {
             refresh();
         }
-        System.out.println(LocalTime.now() + " getNames() called");
         return topics;
     }
 }
