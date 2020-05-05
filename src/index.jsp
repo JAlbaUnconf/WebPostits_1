@@ -54,6 +54,7 @@
     <title>Marketplace</title>
 </head>
 <body>
+<a href="marketplace2.jsp" style="color:white">marketplace 2</a>
 <ul>
     <c:forEach var="topic" items="<%=scot.jalba.PostitsServlet.getTopicData()%>">
         <li>
