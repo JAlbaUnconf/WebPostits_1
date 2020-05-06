@@ -11,7 +11,7 @@
 <body>
 <a href="marketplace2.jsp" style="color:white">marketplace 2</a>
 <ul>
-    <c:forEach var="topic" items="<%=scot.jalba.PostitsServlet.getTopicData()%>">
+    <c:forEach var="topic" items="${topic_repository}">
         <li>
             <a href="#">
                 <c:forEach  var="topicElement" items="title,text,authorImg,author">
@@ -23,7 +23,7 @@
                     </c:if>
                     <c:if test="${topicElement == 'authorImg'}">
                         <img src="<c:out value="${topic.get(topicElement)}"/>" width="42" height="42">
-                        </c:if>                        
+                    </c:if>
                     <c:if test="${topicElement == 'author'}">
                         <p class="author"><c:out value="${topic.get(topicElement)}"/></p>
                     </c:if>
