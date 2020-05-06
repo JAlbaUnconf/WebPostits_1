@@ -24,7 +24,7 @@ public class ApplicationStartUp implements ServletContextListener {
 
     private static final String QIQOCHAT_URL = "https://jalba.qiqochat.com";
 
-    public static final String QIQO_CHAT_PAGE = "https://qiqochat.com/c/pmtyyRCS/";
+    private static final String QIQO_CHAT_TEST_PAGE = "https://qiqochat.com/c/pmtyyRCS/";
 
     public static final String TOPIC_REPOSITORY = "topic_repository";
 
@@ -62,8 +62,11 @@ public class ApplicationStartUp implements ServletContextListener {
             List<Map<String, Object>> topicsDto = (List<Map<String, Object>>) context.getAttribute(TOPIC_REPOSITORY);
             int topicCount = determineNextTopicId(topicsDto);
             Topics topics = new Topics(topicsDto);
-
-            Document doc = Jsoup.connect(QIQO_CHAT_PAGE).get();
+            String qiqoChatPage = System.getProperty("QIQO_CHAT_PAGE");
+            if (qiqoChatPage == null) {
+                qiqoChatPage = QIQO_CHAT_TEST_PAGE;
+            }
+            Document doc = Jsoup.connect(qiqoChatPage).get();
             Elements elementsByClass = doc.getElementsByClass("conversation-starter-label");
 
             for (Element topic : elementsByClass) {
