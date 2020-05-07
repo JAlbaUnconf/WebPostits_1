@@ -7,12 +7,13 @@
 
 ## Docker
 
-To run the application locally in a dockerized tomcat, run build.sh to get the war file built, then run 
+The provided Dockerfile will perform a self-contained multi-stage build, so just build the image and you are good to go:
 ```
 docker build -t jalba .
 ```
-to build the image and with
+
+Afterwards you can run a container based on the created image (internal port is `8080`)
 ``` 
 docker run -p 80:8080 jalba
 ```
-you can start the tomcat server with the deployed app available at [http://localhost/jalba/](http://localhost/jalba/)
+and the tomcat server will be started with the deployed app available at [http://localhost/jalba/](http://localhost/jalba/).
